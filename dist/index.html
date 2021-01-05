@@ -17,12 +17,12 @@
       for (let i = 0; i < 1000; i += 1) {
         rows10[i] = {
           cells: {
-            0: { text: 'A-' + i },
-            1: { text: 'B-' + i },
-            2: { text: 'C-' + i },
-            3: { text: 'D-' + i },
-            4: { text: 'E-' + i },
-            5: { text: 'F-' + i },
+            0: { text: i % 2 === 0 },
+            1: { text: 1 + i },
+            2: { text: 2 + i },
+            3: { text: 3 + i },
+            4: { text: 4 + i },
+            5: { text: 5 + i },
           }
         };
       }
@@ -81,7 +81,10 @@
           console.log('cell:', cell, ', ri:', ri, ', ci:', ci);
         }).on('cell-edited', (text, ri, ci) => {
           console.log('text:', text, ', ri: ', ri, ', ci:', ci);
-        });
+        })
+      .on('sheet-selected', (name) => {
+        console.log('sheet:', name);
+      });
 
       setTimeout(() => {
         // xs.loadData([{ rows }]);

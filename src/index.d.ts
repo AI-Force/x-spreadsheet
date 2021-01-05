@@ -69,6 +69,22 @@ declare module 'x-data-spreadsheet' {
   }
 
   /**
+   * Validation Properties
+   */
+  export interface ValidationProperties {
+    refs: string[];
+    mode: 'cell';
+    type: ValidatorType;
+    required: boolean;
+    operator: ValidationOperator;
+    value: string | number[];
+  }
+  
+  export type ValidatorType = 'list' | 'number' | 'date' | 'phone' | 'email';
+
+  export type ValidationOperator = 'be' | 'nbe' | 'eq' | 'neq' | 'lt' | 'lte' | 'gt' | 'gte';
+
+  /**
    * Data for representing a cell
    */
   export interface CellData {
@@ -101,6 +117,7 @@ declare module 'x-data-spreadsheet' {
     rows?: {
       [key: number]: RowData
     };
+    validations?: ValidationProperties[];
   }
 
   /**
@@ -200,4 +217,22 @@ declare module 'x-data-spreadsheet' {
     }
   }
 }
+
+declare module 'x-data-spreadsheet/src/core/alphabet' {
+
+  export type TagA1 = string;
+
+  export type TagXY = [number, number];
+
+  export function stringAt(index: number): string;
+  
+  export function indexAt(str: string): number;
+
+  export function expr2xy(src: TagA1): TagXY;
+
+  export function xy2expr(x: number, y: number): TagA1;
+
+  export function expr2expr(src: TagA1, xn: number, yn: number, condition: (x: number, y: number) => boolean): TagA1;
+}
+
 
