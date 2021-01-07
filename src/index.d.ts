@@ -1,4 +1,7 @@
 declare module 'x-data-spreadsheet' {
+  import Sheet from 'x-data-spreadsheet/src/component/sheet';
+  import DataProxy from 'x-data-spreadsheet/src/core/data_proxy';
+
   export interface Options {
     mode?: 'edit' | 'read';
     showToolbar?: boolean;
@@ -149,10 +152,12 @@ declare module 'x-data-spreadsheet' {
   export interface Row {}
   export interface Table {}
   export interface Cell {}
-  export interface Sheet {}
 
   export default class Spreadsheet {
     constructor(container: string | HTMLElement, opts?: Options);
+    datas: DataProxy[];
+    sheet: Sheet;
+
     on: SpreadsheetEventHandler;
     /**
      * retrieve cell
@@ -160,18 +165,14 @@ declare module 'x-data-spreadsheet' {
      * @param colIndex {number} column index
      * @param sheetIndex {number} sheet iindex
      */
-    cell(rowIndex: number, colIndex: number, sheetIndex: number): Cell;
+    cell(rowIndex: number, colIndex: number, sheetIndex: number = 0): Cell;
     /**
      * retrieve cell style
      * @param rowIndex
      * @param colIndex
      * @param sheetIndex
      */
-    cellStyle(
-      rowIndex: number,
-      colIndex: number,
-      sheetIndex: number
-    ): CellStyle;
+    cellStyle(rowIndex: number, colIndex: number, sheetIndex: number = 0): CellStyle;
     /**
      * get/set cell text
      * @param rowIndex
@@ -210,6 +211,10 @@ declare module 'x-data-spreadsheet' {
      * @param message
      */
     locale(lang: string, message: string): void;
+    /**
+     * re-render
+     */
+    reRender();
   }
   global {
     interface Window {
@@ -232,7 +237,21 @@ declare module 'x-data-spreadsheet/src/core/alphabet' {
 
   export function xy2expr(x: number, y: number): TagA1;
 
-  export function expr2expr(src: TagA1, xn: number, yn: number, condition: (x: number, y: number) => boolean): TagA1;
+  export function expr2expr(src: TagA1, xn: number, yn: number, condition: (x: number, y: number) => boolean = () => true): TagA1;
 }
 
+declare module 'x-data-spreadsheet/src/core/data_proxy' {
+
+  export default class DataProxy {
+    setData(d: Record<string, any>);
+  }
+}
+
+declare module 'x-data-spreadsheet/src/component/sheet' {
+  import DataProxy from 'x-data-spreadsheet/src/core/data_proxy';
+
+  export default class Sheet {
+    data: DataProxy;
+  }
+}
 
